@@ -62,7 +62,7 @@ body {
     color: var(--primary);
     font-weight: 800;
     letter-spacing: 0.08em;
-    font-size: 3rem;
+    font-size: calc(3rem - 10px);
     padding-left:50px;
 }
 
