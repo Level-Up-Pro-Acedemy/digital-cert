@@ -76,9 +76,26 @@
       holder.style.display = present ? '' : 'none';
     }
 
-    setSigner(1, p.trainer1_name, p.trainer1_title);
-    setSigner(2, p.trainer2_name, p.trainer2_title);
-    setSigner(3, p.trainer3_name, p.trainer3_title);
+    // Parse combined trainer_name format: "Name; Title1; Title2"
+    function parseTrainerData(trainerParam) {
+      if (!trainerParam) return { name: '', title: '' };
+      const parts = trainerParam.split(';').map(s => s.trim()).filter(Boolean);
+      if (parts.length === 0) return { name: '', title: '' };
+      if (parts.length === 1) return { name: parts[0], title: '' };
+      
+      const name = parts[0];
+      const title = parts.slice(1).join('<br>');
+      return { name, title };
+    }
+
+    // Handle both separate params and combined format
+    const trainer1 = parseTrainerData(p.trainer1_name);
+    const trainer2 = parseTrainerData(p.trainer2_name);
+    const trainer3 = parseTrainerData(p.trainer3_name);
+
+    setSigner(1, trainer1.name, trainer1.title);
+    setSigner(2, trainer2.name, trainer2.title);
+    setSigner(3, trainer3.name, trainer3.title);
 
     // Load signatures based on fuzzy match of provided trainer names
     function probeImage(url) {
@@ -127,9 +144,9 @@
       }
     }
 
-    setSignatureFor(1, p.trainer1_name);
-    setSignatureFor(2, p.trainer2_name);
-    setSignatureFor(3, p.trainer3_name);
+    setSignatureFor(1, trainer1.name);
+    setSignatureFor(2, trainer2.name);
+    setSignatureFor(3, trainer3.name);
 
     // Auto print when ready (default to auto unless autoprint=0)
     const auto = (p.autoprint !== '0');
