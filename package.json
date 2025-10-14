@@ -1,0 +1,13 @@
+{
+  "name": "certificate-generator",
+  "version": "1.0.0",
+  "description": "URL-driven certificate generator",
+  "main": "cert.html",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx serve . -p 3000 --live"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}
