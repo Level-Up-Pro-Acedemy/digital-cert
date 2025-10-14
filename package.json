@@ -4,8 +4,8 @@
   "description": "URL-driven certificate generator",
   "main": "cert.html",
   "scripts": {
-    "start": "npx serve . -p 3000",
-    "dev": "npx serve . -p 3000 --live"
+    "build": "echo 'Static site - no build needed'",
+    "start": "npx serve . -p 3000 -s"
   },
   "dependencies": {
     "serve": "^14.2.1"
