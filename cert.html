@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Certificate</title>
+  <link rel="stylesheet" href="css/cert.css">
+</head>
+<body>
+  <main class="stage">
+    <section class="certificate" role="document" aria-label="Certificate">
+      <!-- Serial only (moved and restyled in CSS) -->
+      <div id="serial" class="serial">AGAI-000000-XXX-000</div>
+      <div id="name" class="name">RECIPIENT NAME</div>
+
+      <!-- Body copy (two lines to match sample) -->
+      <p id="body1" class="body line1">
+        For participating in the Agentic AI Workshop
+        held by Levelup Pro Academy on October 30–31, 2025
+      </p>
+      
+
+      <!-- Organizer/date if needed as separate fields -->
+      <div id="date" class="meta date" aria-hidden="true"></div>
+      <div id="organizer" class="meta organizer" aria-hidden="true"></div>
+
+      <!-- Signatories -->
+      <div class="signatories">
+        <div class="sig sig-left">
+          <div class="sig-image" aria-hidden="true"></div>
+          <div id="trainer1-name" class="sig-name">Ts. Au Soon Yong</div>
+          <div id="trainer1-title" class="sig-title">Program Director<br>Lead Trainer</div>
+        </div>
+        <div class="sig sig-right">
+          <div class="sig-image" aria-hidden="true"></div>
+          <div id="trainer2-name" class="sig-name">Daniel Toidy</div>
+          <div id="trainer2-title" class="sig-title">Program Facilitator<br>Co Trainer</div>
+        </div>
+        <!-- Optional third signature -->
+        <div class="sig sig-third">
+          <div class="sig-image" aria-hidden="true"></div>
+          <div id="trainer3-name" class="sig-name"></div>
+          <div id="trainer3-title" class="sig-title"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/cert.js" defer></script>
+</body>
+</html>
+
