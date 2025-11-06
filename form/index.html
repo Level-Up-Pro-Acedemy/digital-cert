@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Course Registration - LevelUp Pro Academy</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header with Progress -->
+    <header class="header">
+      <div class="header-content">
+        <div class="hamburger-container">
+          <button class="hamburger-icon" id="hamburger-btn" aria-label="Navigation menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="hamburger-dropdown hidden" id="hamburger-dropdown">
+            <a href="#" class="hamburger-item">Homepage</a>
+          </div>
+        </div>
+        <h1 class="header-title">Course Registration</h1>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-bar"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chat Container -->
+    <main class="chat-container" id="chat-container" role="log" aria-live="polite" aria-label="Conversation">
+      <!-- Messages will be dynamically added here -->
+    </main>
+
+    <!-- Input Container -->
+    <div class="input-container" id="input-container">
+      <!-- FAQ Cards will be added here by JavaScript -->
+      <!-- Dynamic input area will be populated by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Prompt Modal -->
+  <div class="prompt-modal-overlay hidden" id="prompt-modal-overlay">
+    <div class="prompt-modal">
+      <div class="prompt-modal-header">
+        <h3 class="prompt-modal-title">Choose a Prompt</h3>
+        <button class="prompt-modal-close" id="prompt-modal-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="prompt-modal-body">
+        <div class="prompt-list" id="prompt-list">
+          <!-- Prompts will be added here by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
