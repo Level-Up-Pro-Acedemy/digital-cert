@@ -1035,7 +1035,7 @@ body {
   }
   
   .message-bubble {
-    max-width: 90%;
+    max-width: 100%;
     padding: var(--space-sm) var(--space-md);
   }
   
