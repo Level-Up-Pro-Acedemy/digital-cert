@@ -5,7 +5,13 @@
     const params = new URLSearchParams(window.location.search);
     const map = {};
     params.forEach((value, key) => {
-      map[key.toLowerCase()] = value;
+      // Recover malformed pairs like "&=training_date=..." where the key landed in the value
+      if (key === '' && value.includes('=')) {
+        const i = value.indexOf('=');
+        key = value.slice(0, i);
+        value = value.slice(i + 1);
+      }
+      if (key) map[key.toLowerCase()] = value;
     });
     return map;
   }
@@ -53,11 +59,45 @@
     return `${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
   }
 
-  // ISO dates (YYYY-MM-DD) are formatted as "16 October 2026"; anything else is shown as given
+  // Excel/Sheets day serials count from 1899-12-30
+  const SHEETS_EPOCH_UTC = Date.UTC(1899, 11, 30);
+  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  // Accepts YYYY-MM-DD, DD/MM/YYYY (or DD-MM-YYYY / DD.MM.YYYY) and spreadsheet day serials such as 46220
+  function parseDate(value) {
+    const text = String(value).trim();
+    let m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(text);
+    if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    m = /^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/.exec(text);
+    if (m) return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]));
+    if (/^\d{4,5}$/.test(text)) {
+      const utc = new Date(SHEETS_EPOCH_UTC + Number(text) * DAY_MS);
+      return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+    }
+    return null;
+  }
+
+  // "16 July – 2 August 2026" style range, collapsing shared month/year ("16–17 July 2026")
+  function formatRange(start, end) {
+    if (start.getTime() === end.getTime()) return formatDate(start);
+    if (start.getFullYear() !== end.getFullYear()) return `${formatDate(start)} – ${formatDate(end)}`;
+    if (start.getMonth() !== end.getMonth()) {
+      return `${start.getDate()} ${MONTHS[start.getMonth()]} – ${formatDate(end)}`;
+    }
+    return `${start.getDate()}–${formatDate(end)}`;
+  }
+
+  // Single dates and "start - end" ranges are formatted; anything unrecognised is shown as given
   function displayDate(value) {
-    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value).trim());
-    if (!m) return value;
-    return formatDate(new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+    const single = parseDate(value);
+    if (single) return formatDate(single);
+    const parts = String(value).split(/\s+(?:-|–|to)\s+/i);
+    if (parts.length === 2) {
+      const start = parseDate(parts[0]);
+      const end = parseDate(parts[1]);
+      if (start && end) return formatRange(start, end);
+    }
+    return value;
   }
 
   function displayHours(value) {
