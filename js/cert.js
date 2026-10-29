@@ -46,23 +46,56 @@
     return name;
   }
 
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+
+  function formatDate(date) {
+    return `${date.getDate()} ${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+  }
+
+  // ISO dates (YYYY-MM-DD) are formatted as "16 October 2026"; anything else is shown as given
+  function displayDate(value) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value).trim());
+    if (!m) return value;
+    return formatDate(new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
+  }
+
+  function displayHours(value) {
+    return /^\d+(\.\d+)?$/.test(String(value).trim()) ? `${value} hours` : value;
+  }
+
+  // Shrink the name so it never runs past the gold line printed in the template
+  const NAME_MAX_WIDTH = 451 / 842;
+  function fitName() {
+    const el = document.getElementById('name');
+    const cert = el?.closest('.certificate');
+    if (!el || !cert) return;
+    el.style.fontSize = '';
+    const maxWidth = cert.clientWidth * NAME_MAX_WIDTH;
+    const width = el.scrollWidth;
+    if (width > maxWidth) {
+      el.style.fontSize = `calc(30.4 * var(--u) * ${maxWidth / width})`;
+    }
+  }
+
   function populate() {
     const p = getParamMap();
 
-    setHTML('serial', p.serial);
-    setHTML('title', p.title || 'CERTIFICATE');
-    setHTML('subtitle', p.subtitle || 'OF PARTICIPATION');
-    setHTML('awarded', p.awarded || 'THIS CERTIFICATE IS AWARDED TO');
+    setHTML('serial', p.serial ? escapeHTML(p.serial) : '');
 
     const name = maybeUppercaseName(p.name, p.caps);
-    setHTML('name', name || 'RECIPIENT NAME');
+    setHTML('name', name ? escapeHTML(name) : 'RECIPIENT NAME');
 
-    // body1 may contain <br> or newlines which should become visible line breaks
+    setHTML('course', p.course ? escapeHTML(p.course) : '');
+    // body1 replaces the whole "attended the ... as a participant" line
     setHTMLWithBreaks('body1', p.body1);
-    // body2 deprecated in current layout but still supported if present
-    setHTMLWithBreaks('body2', p.body2);
-    setHTML('date', p.date);
-    setHTML('organizer', p.organizer);
+
+    if (p.hours) setHTML('hours', escapeHTML(displayHours(p.hours)));
+
+    const trainingDate = p.training_date || p.date;
+    if (trainingDate) setHTML('training-date', escapeHTML(displayDate(trainingDate)));
+    // Issue date falls back to the day the certificate is generated
+    setHTML('issue-date', escapeHTML(p.issue_date ? displayDate(p.issue_date) : formatDate(new Date())));
 
     // Signatories (hide blocks when empty so they don't take space)
     function setSigner(idx, name, title) {
@@ -148,10 +181,14 @@
     setSignatureFor(2, trainer2.name);
     setSignatureFor(3, trainer3.name);
 
+    const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+    fontsReady.then(fitName);
+    window.addEventListener('resize', fitName);
+
     // Auto print when ready (default to auto unless autoprint=0)
     const auto = (p.autoprint !== '0');
     if (auto) {
-      setTimeout(() => window.print(), 800);
+      fontsReady.then(() => setTimeout(() => window.print(), 800));
     }
   }
 

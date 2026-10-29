@@ -4,41 +4,55 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Certificate</title>
-  <link rel="stylesheet" href="css/cert.css?v=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/cert.css?v=2.0">
 </head>
 <body>
   <main class="stage">
     <section class="certificate" role="document" aria-label="Certificate">
-      <!-- Serial only (moved and restyled in CSS) -->
-      <div id="serial" class="serial">AGAI-000000-XXX-000</div>
-      <div id="name" class="name">RECIPIENT NAME</div>
+      <div id="name" class="name centered">RECIPIENT NAME</div>
 
-      <!-- Body copy (two lines to match sample) -->
-      <p id="body1" class="body line1">
-        For participating in the Agentic AI Workshop
-        held by Levelup Pro Academy on October 30–31, 2025
+      <p id="body1" class="body centered">
+        attended the <span id="course" class="course">Agentic AI Adopt or Fall Behind Workshop (Level 1)</span> as a participant
       </p>
-      
 
-      <!-- Organizer/date if needed as separate fields -->
-      <div id="date" class="meta date" aria-hidden="true"></div>
-      <div id="organizer" class="meta organizer" aria-hidden="true"></div>
+      <div class="field training-date centered">
+        <div class="field-label">Training Date:</div>
+        <div id="training-date" class="field-value"></div>
+      </div>
+      <div class="field hours centered">
+        <div class="field-label">Training Hours:</div>
+        <div id="hours" class="field-value">14 hours</div>
+      </div>
+      <div class="field serial centered">
+        <div class="field-label">Certificate Number:</div>
+        <div id="serial" class="field-value">AGAI-000000-XXX-000</div>
+      </div>
+      <div class="field issue-date centered">
+        <div class="field-label">Issue Date:</div>
+        <div id="issue-date" class="field-value"></div>
+      </div>
 
       <!-- Signatories -->
-      <div class="signatories">
+      <div class="signatories centered">
         <div class="sig sig-left">
           <div class="sig-image" aria-hidden="true"></div>
+          <div class="sig-rule" aria-hidden="true"></div>
           <div id="trainer1-name" class="sig-name">Ts. Au Soon Yong</div>
-          <div id="trainer1-title" class="sig-title">Program Director<br>Lead Trainer</div>
+          <div id="trainer1-title" class="sig-title">Managing Director<br>Lead Trainer</div>
         </div>
         <div class="sig sig-right">
           <div class="sig-image" aria-hidden="true"></div>
-          <div id="trainer2-name" class="sig-name">Daniel Toidy</div>
-          <div id="trainer2-title" class="sig-title">Program Facilitator<br>Co Trainer</div>
+          <div class="sig-rule" aria-hidden="true"></div>
+          <div id="trainer2-name" class="sig-name">Daniell Toidy</div>
+          <div id="trainer2-title" class="sig-title">Technical Director<br>Trainer</div>
         </div>
         <!-- Optional third signature -->
         <div class="sig sig-third">
           <div class="sig-image" aria-hidden="true"></div>
+          <div class="sig-rule" aria-hidden="true"></div>
           <div id="trainer3-name" class="sig-name"></div>
           <div id="trainer3-title" class="sig-title"></div>
         </div>
@@ -46,7 +60,6 @@
     </section>
   </main>
 
-  <script src="js/cert.js?v=1.0" defer></script>
+  <script src="js/cert.js?v=2.0" defer></script>
 </body>
 </html>
-

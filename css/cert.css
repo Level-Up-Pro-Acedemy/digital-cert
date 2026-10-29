@@ -1,9 +1,11 @@
-/* Base layout: A4 landscape aspect inside responsive stage */
+/* Layout coordinates are in template pixels of static/cert2.jpg (842 x 595).
+   --u converts one template pixel to the rendered size, so positions stay exact at any scale. */
 :root {
-  --canvas-width: 3508px; /* A4 @300dpi width */
-  --canvas-height: 2480px; /* A4 @300dpi height (landscape) */
-  --primary: #2f3ea8; /* deep blue from sample */
-  --text-dark: #1b2a2f;
+  --tpl-width: 842;
+  --tpl-height: 595;
+  --text-dark: #3f3f3f;
+  --maroon: #6f0916;
+  --gold-line: #fcc46f;
 }
 
 * { box-sizing: border-box; }
@@ -12,7 +14,7 @@ body {
   margin: 0;
   background: #f3f4f6;
   color: var(--text-dark);
-  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .stage {
@@ -24,99 +26,106 @@ body {
 .certificate {
   position: relative;
   width: min(100%, 1200px);
+  container-type: inline-size;
+  --u: calc(100cqw / var(--tpl-width));
   /* Prefer modern aspect-ratio, but add a fallback below for older engines */
-  aspect-ratio: var(--canvas-width) / var(--canvas-height);
-  background: #fff url("../static/cert.png") center/cover no-repeat;
+  aspect-ratio: var(--tpl-width) / var(--tpl-height);
+  background: #fff url("../static/cert2.jpg") center/100% 100% no-repeat;
   box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 /* Intrinsic ratio fallback when aspect-ratio is unsupported (e.g., legacy/IE mode) */
 .certificate::before {
   content: "";
   display: block;
-  padding-bottom: calc(var(--canvas-height) / var(--canvas-width) * 100%);
+  padding-bottom: calc(var(--tpl-height) / var(--tpl-width) * 100%);
 }
-
-/* Typography scaled with container using viewport-based unit */
-.certificate { font-size: clamp(10px, 1.25vw, 16px); }
 
 /* Make absolutely positioned items target the certificate box even with the ::before height */
-.certificate > * { position: absolute; }
-
-/* Positioned elements (coordinates approximated to match sample) */
-.serial {
-    top: 24%;
-    right: 12%;
-    font-family: "SFMono-Semibold", "Consolas", "Courier New", monospace;
-    font-weight: 800;
-    font-size: 1.05rem;
-    letter-spacing: 0.06em;
+.certificate > * {
+  position: absolute;
+  margin: 0;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-/* Hide decorative headings and preface lines per request */
-.title, .subtitle, .awarded { display: none; }
+/* Horizontally centred on a template x coordinate (--cx) */
+.centered {
+  left: calc(var(--cx) * var(--u));
+  transform: translateX(-50%);
+  text-align: center;
+}
 
+/* Name sits above the gold line printed in the template (x 197–648, y 300) */
 .name {
-    top: 47%;
-    width: 100%;
-    text-align: center;
-    color: var(--primary);
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    font-size: calc(3rem - 10px);
-    padding-left:50px;
+  --cx: 422.5;
+  /* Anchored from the bottom so shrunk long names stay on the line */
+  bottom: calc(302.1 * var(--u));
+  font-size: calc(30.4 * var(--u));
+  font-weight: 700;
 }
 
 .body {
-    left: 50%;
-    transform: translateX(-50%);
-    line-height: 1.5;
-    font-size: calc(1.1rem + 3px);
-    text-align: center;
+  --cx: 421;
+  top: calc(314.5 * var(--u));
+  font-size: calc(13.1 * var(--u));
 }
-.body.line1 { top: 54.5%; }
-.body.line2 { top: 61.5%; }
+.body .course { color: var(--maroon); }
 
-.meta { font-size: 0.95rem; }
-.meta.date { top: 66%; left: 26.5%; }
-.meta.organizer { top: 69%; left: 26.5%; }
-
+/* Label row (Training Date, Training Hours, Certificate Number, Issue Date) with values beneath */
+.field {
+  top: calc(354.5 * var(--u));
+  font-size: calc(13 * var(--u));
+}
+.field-label { font-size: calc(13.2 * var(--u)); }
+.field.training-date { --cx: 219; }
+.field.hours { --cx: 356.5; }
+.field.serial { --cx: 494.5; }
+.field.issue-date { --cx: 632; }
+.field-value {
+  margin-top: calc(13.3 * var(--u));
+  font-weight: 700;
+}
 
 .signatories {
-  left: 50%;
-  transform: translateX(-50%);
-  width: 74%;
-  bottom: 10%;
+  --cx: 431.5;
+  top: calc(435 * var(--u));
   display: flex;
-  justify-content: center;   /* center 1, 2, or 3 items */
-  align-items: flex-start;
-  gap: 2rem;                 /* smaller gap */
+  justify-content: center;
+  gap: calc(39 * var(--u));
 }
 
-.sig { 
-  text-align: center; 
-  flex: 0 1 32%;            /* up to 3 signatures fit neatly */
-  max-width: 33%;
+.sig {
+  width: calc(168 * var(--u));
+  text-align: center;
 }
-
-.sig-name { font-weight: 700; font-size: calc(1rem + 3px); }
-.sig-title { font-size: calc(0.95rem + 10px); }
 .sig-image {
-  height: 90px;                /* taller to showcase signatures */
-  margin-bottom: 6px;
+  height: calc(40 * var(--u));
   background-repeat: no-repeat;
   background-position: center bottom;
-  background-size: contain;    /* fit within the box */
-  opacity: 0.95;               /* nearly solid when image present */
+  background-size: contain;
 }
-.sig-name { font-weight: 700; }
-.sig-title { font-size: 0.95rem; }
+.sig-rule {
+  margin-top: calc(1 * var(--u));
+  border-top: max(1px, calc(1 * var(--u))) solid var(--gold-line);
+}
+.sig-name {
+  margin-top: calc(8 * var(--u));
+  font-size: calc(11.7 * var(--u));
+  font-weight: 700;
+  line-height: 1;
+}
+.sig-title {
+  margin-top: calc(2.8 * var(--u));
+  font-size: calc(12 * var(--u));
+  line-height: calc(15 * var(--u));
+}
 
 /* Print styles: full-bleed on a single A4 landscape page */
 @media print {
   @page { size: A4 landscape; margin: 0; }
   body { background: #fff; }
   .stage { padding: 0; }
-  .certificate { width: 100vw; height: 100vh; font-size: 12px; box-shadow: none; }
+  .certificate { width: 100vw; height: 100vh; box-shadow: none; }
 }
-
-
