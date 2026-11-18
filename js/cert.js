@@ -32,7 +32,7 @@
       .replace(/'/g, '&#39;');
   }
 
-  // Set content allowing only line breaks: supports \n and <br> (case-insensitive), including URL-encoded
+  // Set content allowing line breaks and [accent] markers: [text] is shown in maroon without the brackets
   function setHTMLWithBreaks(id, text) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -40,7 +40,8 @@
     const escaped = escapeHTML(text);
     const withBreaks = escaped
       .replace(/&lt;br\s*\/?&gt;/gi, '<br>') // already-escaped <br>
-      .replace(/\n/g, '<br>');
+      .replace(/\n/g, '<br>')
+      .replace(/\[([^\]]+)\]/g, '<span class="course">$1</span>');
     el.innerHTML = withBreaks;
   }
 
